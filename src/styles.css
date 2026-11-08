@@ -1,0 +1,174 @@
+:root {
+  --fundo: #eef2ef;
+  --papel: #ffffff;
+  --tinta: #1b2a41;
+  --suave: #5b6b7c;
+  --linha: #cfd8d3;
+  --x: #0b7a75;
+  --o: #c93a52;
+  --acento: #1b2a41;
+  --foco: #1f6feb;
+  font-family: 'Avenir Next', 'Trebuchet MS', system-ui, sans-serif;
+  color: var(--tinta);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  min-height: 100vh;
+}
+
+.pagina {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
+}
+
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+h1 { font-size: 1.5rem; margin: 0; letter-spacing: -0.01em; }
+h2 { font-size: 1.15rem; margin: 0 0 10px; }
+
+.cartao {
+  background: var(--papel);
+  border: 2px solid var(--linha);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.login h1 { margin-bottom: 8px; }
+
+.aviso { color: var(--suave); margin: 0 0 14px; line-height: 1.4; }
+.info { color: var(--x); margin: 0 0 10px; }
+.erro { color: var(--o); margin: 0 0 10px; font-weight: 600; }
+
+form { display: grid; gap: 12px; }
+
+label { display: grid; gap: 4px; font-weight: 600; font-size: 0.95rem; }
+
+input {
+  font: inherit;
+  padding: 11px 12px;
+  border: 2px solid var(--linha);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--tinta);
+}
+
+input:focus-visible, button:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.botao {
+  font: inherit;
+  font-weight: 700;
+  padding: 12px 18px;
+  border: 2px solid var(--acento);
+  border-radius: 10px;
+  background: var(--acento);
+  color: #fff;
+  cursor: pointer;
+  width: 100%;
+}
+
+.botao:disabled { opacity: 0.55; cursor: not-allowed; }
+.botao.secundario { background: transparent; color: var(--acento); width: auto; }
+.botao.pequeno { padding: 7px 12px; font-size: 0.9rem; }
+
+.abas { display: flex; gap: 8px; margin: 14px 0; }
+.aba {
+  flex: 1;
+  font: inherit;
+  font-weight: 600;
+  padding: 9px;
+  border: 2px solid var(--linha);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--suave);
+  cursor: pointer;
+}
+.aba.ativa { border-color: var(--acento); color: var(--acento); }
+
+.separador { text-align: center; color: var(--suave); margin: 18px 0 12px; }
+
+.linha { display: flex; gap: 10px; align-items: end; }
+.linha .grande { flex: 1; }
+.linha .botao { white-space: nowrap; }
+
+.lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.lista li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--linha);
+}
+.lista li:last-child { border-bottom: 0; }
+.lista small { color: var(--suave); }
+
+.cabecalho-partida {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.rotulo { margin: 0; color: var(--suave); font-size: 0.85rem; }
+.codigo { margin: 0; font-size: 1.8rem; font-weight: 800; letter-spacing: 0.12em; }
+
+.jogadores {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.marca-x { color: var(--x); }
+.marca-o { color: var(--o); text-align: right; }
+
+.status {
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-align: center;
+  margin: 8px 0 14px;
+}
+.status.venceu { color: var(--x); }
+.status.perdeu { color: var(--o); }
+
+.tabuleiro {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0 auto 16px;
+  max-width: 340px;
+}
+
+.casa {
+  aspect-ratio: 1;
+  font: inherit;
+  font-size: 3rem;
+  font-weight: 800;
+  background: var(--fundo);
+  border: 2px solid var(--linha);
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--tinta);
+}
+.casa:disabled { cursor: default; }
+.casa:not(:disabled):hover { border-color: var(--acento); }
+.casa.x { color: var(--x); }
+.casa.o { color: var(--o); }
+.casa.destaque { background: #d9efe9; border-color: var(--x); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .casa, .botao, .aba { transition: border-color 0.12s, background-color 0.12s; }
+}

@@ -1,0 +1,69 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  build-e-teste:
+    name: Build e teste funcional
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Validar o build do Vite
+        run: npm run build
+
+      - name: Rodar o teste funcional (Vitest)
+        run: npm test
+
+  deploy:
+    name: Publicar imagem e atualizar o Portainer
+    needs: build-e-teste
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    env:
+      PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Definir o nome da imagem (em minúsculas)
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/jogo-da-velha" >> "$GITHUB_ENV"
+
+      - name: Entrar no GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construir e publicar a imagem Docker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          labels: org.opencontainers.image.source=https://github.com/${{ github.repository }}
+
+      - name: Acionar o webhook do Portainer
+        run: |
+          if [ -z "$PORTAINER_WEBHOOK_URL" ]; then
+            echo "Falta o secret PORTAINER_WEBHOOK_URL no GitHub (Settings > Secrets and variables > Actions)."
+            exit 1
+          fi
+          curl -fsS -k -X POST "$PORTAINER_WEBHOOK_URL"

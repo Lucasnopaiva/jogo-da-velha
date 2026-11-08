@@ -1,0 +1,9 @@
+# Stack usada pelo Portainer na VPS da Oracle Cloud.
+# A imagem e publicada pelo GitHub Actions no GitHub Container Registry.
+services:
+  jogo:
+    image: ghcr.io/lucasnopaiva/jogo-da-velha:latest
+    container_name: jogo-da-velha
+    ports:
+      - "80:80"
+    restart: unless-stopped
