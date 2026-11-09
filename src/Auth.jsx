@@ -37,7 +37,7 @@ export default function Auth() {
 
   return (
     <section className="cartao login">
-      <h1>Jogo da Velha Online</h1>
+      <h1>Jogo da Velha Online v2</h1>
       <p className="aviso">Crie uma conta, abra uma sala e jogue contra outra pessoa em tempo real.</p>
 
       <div className="abas" role="tablist">
